@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dashboard - La Bodega Online</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="black-bar">
+            <h1>La Bodega Online</h1>
+        </div>
+        <div class="dashboard-container">
+            <div class="dashboard-content">
+                <h2>Welcome, <span id="username-display">User</span>!</h2>
+                <p>You have successfully logged in.</p>
+                <button onclick="logout()" class="login-button">Logout</button>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const username = localStorage.getItem('username');
+                const token = localStorage.getItem('authToken');
+                
+                if (!token) {
+                    window.location.href = '/index.html';
+                } else {
+                    document.getElementById('username-display').textContent = username;
+                }
+            });
+            
+            function logout() {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('username');
+                window.location.href = '/index.html';
+            }
+        </script>
+    </body>
+</html>
