@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8">
         <title>Dashboard - La Bodega Online</title>
         <link rel="stylesheet" href="style.css">
     </head>
@@ -12,31 +13,29 @@
             <div class="dashboard-content">
                 <h2>Welcome, <span id="username-display">User</span>!</h2>
                 <p>You have successfully logged in.</p>
-                <button onclick="logout()" class="login-button">Logout</button>
+                <button id="logoutBtn" class="login-button">Logout</button>
             </div>
         </div>
+
         <script>
             function getBasePath() {
                 const path = window.location.pathname;
-                if (path.includes('/coreykester.com/')) {
-                    return '/coreykester.com/';
-                }
-                return './';
+                return path.includes('/coreykester.com/') ? '/coreykester.com/' : './';
             }
 
             document.addEventListener('DOMContentLoaded', function() {
                 const username = localStorage.getItem('currentUser');
                 if (!username) {
                     window.location.href = getBasePath() + 'index.html';
-                } else {
-                    document.getElementById('username-display').textContent = username;
+                    return;
                 }
+                document.getElementById('username-display').textContent = username;
+
+                document.getElementById('logoutBtn').addEventListener('click', function() {
+                    localStorage.removeItem('currentUser');
+                    window.location.href = getBasePath() + 'index.html';
+                });
             });
-            
-            function logout() {
-                localStorage.removeItem('currentUser');
-                window.location.href = getBasePath() + 'index.html';
-            }
         </script>
     </body>
 </html>
