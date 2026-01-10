@@ -3,7 +3,6 @@
     <head>
         <title>Dashboard - La Bodega Online</title>
         <link rel="stylesheet" href="style.css">
-        <script src="config.js"></script>
     </head>
     <body>
         <div class="black-bar">
@@ -17,19 +16,26 @@
             </div>
         </div>
         <script>
+            function getBasePath() {
+                const path = window.location.pathname;
+                if (path.includes('/coreykester.com/')) {
+                    return '/coreykester.com/';
+                }
+                return './';
+            }
+
             document.addEventListener('DOMContentLoaded', function() {
                 const username = localStorage.getItem('currentUser');
                 if (!username) {
-                    window.location.href = basePath + 'index.html';
-                    window.location.href = './index.html';
+                    window.location.href = getBasePath() + 'index.html';
                 } else {
                     document.getElementById('username-display').textContent = username;
                 }
             });
+            
             function logout() {
                 localStorage.removeItem('currentUser');
-                window.location.href = basePath + 'index.html';
-            }   window.location.href = './index.html';
+                window.location.href = getBasePath() + 'index.html';
             }
         </script>
     </body>

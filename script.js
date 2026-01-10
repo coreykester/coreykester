@@ -6,6 +6,14 @@ function initApp() {
     }
 }
 
+function getBasePath() {
+    const path = window.location.pathname;
+    if (path.includes('/coreykester.com/')) {
+        return '/coreykester.com/';
+    }
+    return './';
+}
+
 function setupLogin() {
     const form = document.querySelector('form');
     const signupBtn = document.querySelector('.signup-link a');
@@ -25,7 +33,7 @@ function setupLogin() {
         
         if (user) {
             localStorage.setItem('currentUser', username);
-            window.location.href = basePath + 'dashboard.html';
+            window.location.href = getBasePath() + 'dashboard.html';
         } else {
             alert('Invalid username or password');
         }
