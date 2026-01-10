@@ -1,128 +1,119 @@
-// Simple in-browser authentication system for GitHub Pages
-function setupLoginForm() {
-    const loginForm = document.querySelector('form');
-    if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            // Get users from localStorage
-            const users = JSON.parse(localStorage.getItem('users') || '[]');
-            const user = users.find(u => u.username === username);
-            
-            if (!user) {
-                alert('Invalid username or password');
-                return;
-            }
-            
-            // Simple password check (in production, use proper hashing)
-            if (user.password !== password) {
-                alert('Invalid username or password');
-                return;
-            }
-            
-            // Set auth
-            localStorage.setItem('authToken', 'token_' + Date.now());
-            localStorage.setItem('username', username);
-            alert('Login successful!');
+let currentPage = 'login';
+
+function initApp() {
+    if (currentPage === 'login') {
+        setupLogin();
+    }
+}
+
+function setupLogin() {
+    const form = document.querySelector('form');
+    const signupBtn = document.querySelector('.signup-link a');
+    
+    form.onsubmit = (e) => {
+        e.preventDefault();
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        
+        if (!username || !password) {
+            alert('Please fill in all fields');
+            return;
+        }
+        
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const user = users.find(u => u.username === username && u.password === password);
+        
+        if (user) {
+            localStorage.setItem('currentUser', username);
             window.location.href = 'dashboard.html';
-        });
-    }
+        } else {
+            alert('Invalid username or password');
+        }
+    };
+    
+    signupBtn.onclick = (e) => {
+        e.preventDefault();
+        goToSignup();
+    };
 }
 
-function setupSignupLink() {
-    const signupLink = document.querySelector('.signup-link a');
-    if (signupLink) {
-        signupLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            showSignupForm();
-        });
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    setupLoginForm();
-    setupSignupLink();
-});
-
-function showSignupForm() {
+function goToSignup() {
+    currentPage = 'signup';
     const loginBox = document.querySelector('.login-box');
     loginBox.innerHTML = `
         <h2>Sign Up</h2>
-        <form id="signupForm">
+        <form onsubmit="handleSignup(event)">
             <div class="form-group">
-                <label for="signup-username">Username</label>
-                <input type="text" id="signup-username" name="username" required minlength="3">
+                <label for="new-username">Username</label>
+                <input type="text" id="new-username" required minlength="3">
             </div>
             <div class="form-group">
-                <label for="signup-email">Email</label>
-                <input type="email" id="signup-email" name="email" required>
+                <label for="new-email">Email</label>
+                <input type="email" id="new-email" required>
             </div>
             <div class="form-group">
-                <label for="signup-password">Password</label>
-                <input type="password" id="signup-password" name="password" required minlength="6">
+                <label for="new-password">Password</label>
+                <input type="password" id="new-password" required minlength="6">
             </div>
             <div class="form-group">
-                <label for="signup-confirm">Confirm Password</label>
-                <input type="password" id="signup-confirm" name="confirm" required minlength="6">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" required minlength="6">
             </div>
             <button type="submit" class="login-button">Sign Up</button>
         </form>
-        <p class="signup-link">Already have an account? <a href="#" id="loginLink">Login here</a></p>
+        <p class="signup-link">Already have an account? <a href="#" onclick="goToLogin(); return false;">Login here</a></p>
     `;
-    
-    const signupForm = document.getElementById('signupForm');
-    const loginLink = document.getElementById('loginLink');
-    
-    loginLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        location.reload();
-    });
-    
-    signupForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const username = document.getElementById('signup-username').value;
-        const email = document.getElementById('signup-email').value;
-        const password = document.getElementById('signup-password').value;
-        const confirm = document.getElementById('signup-confirm').value;
-        
-        if (username.length < 3) {
-            alert('Username must be at least 3 characters');
-            return;
-        }
-        
-        if (password.length < 6) {
-            alert('Password must be at least 6 characters');
-            return;
-        }
-        
-        if (password !== confirm) {
-            alert('Passwords do not match');
-            return;
-        }
-        
-        // Get existing users
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        
-        // Check if username exists
-        if (users.find(u => u.username === username)) {
-            alert('Username already exists');
-            return;
-        }
-        
-        // Add new user
-        users.push({
-            username,
-            email,
-            password,
-            createdAt: new Date().toISOString()
-        });
-        
-        localStorage.setItem('users', JSON.stringify(users));
-        alert('Account created successfully! Please login.');
-        location.reload();
-    });
 }
+
+function goToLogin() {
+    currentPage = 'login';
+    location.reload();
+}
+
+function handleSignup(e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('new-username').value.trim();
+    const email = document.getElementById('new-email').value.trim();
+    const password = document.getElementById('new-password').value.trim();
+    const confirmPassword = document.getElementById('confirm-password').value.trim();
+    
+    if (!username || !email || !password || !confirmPassword) {
+        alert('Please fill in all fields');
+        return;
+    }
+    
+    if (username.length < 3) {
+        alert('Username must be at least 3 characters');
+        return;
+    }
+    
+    if (password.length < 6) {
+        alert('Password must be at least 6 characters');
+        return;
+    }
+    
+    if (password !== confirmPassword) {
+        alert('Passwords do not match');
+        return;
+    }
+    
+    let users = JSON.parse(localStorage.getItem('users') || '[]');
+    
+    if (users.some(u => u.username === username)) {
+        alert('Username already exists');
+        return;
+    }
+    
+    users.push({
+        username,
+        email,
+        password
+    });
+    
+    localStorage.setItem('users', JSON.stringify(users));
+    alert('Account created! Please login.');
+    goToLogin();
+}
+
+window.addEventListener('DOMContentLoaded', initApp);
