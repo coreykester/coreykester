@@ -43,8 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function showSignupForm() {
     const loginBox = document.querySelector('.login-box');
-function showSignupForm() {
-    const loginBox = document.querySelector('.login-box');
     loginBox.innerHTML = `
         <h2>Sign Up</h2>
         <form id="signupForm">
