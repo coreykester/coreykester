@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const signupLink = document.querySelector('.signup-link a');
     
     if (loginForm) {
-        loginForm.addEventListener('submit', async function(e) {
+        loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
             const username = document.getElementById('username').value;
