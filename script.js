@@ -1,8 +1,6 @@
 // Simple in-browser authentication system for GitHub Pages
-document.addEventListener('DOMContentLoaded', function() {
+function setupLoginForm() {
     const loginForm = document.querySelector('form');
-    const signupLink = document.querySelector('.signup-link a');
-    
     if (loginForm) {
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -32,13 +30,21 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = 'dashboard.html';
         });
     }
-    
+}
+
+function setupSignupLink() {
+    const signupLink = document.querySelector('.signup-link a');
     if (signupLink) {
         signupLink.addEventListener('click', function(e) {
             e.preventDefault();
             showSignupForm();
         });
     }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    setupLoginForm();
+    setupSignupLink();
 });
 
 function showSignupForm() {
@@ -64,10 +70,17 @@ function showSignupForm() {
             </div>
             <button type="submit" class="login-button">Sign Up</button>
         </form>
-        <p class="signup-link">Already have an account? <a href="#" onclick="location.reload()">Login here</a></p>
+        <p class="signup-link">Already have an account? <a href="#" id="loginLink">Login here</a></p>
     `;
     
     const signupForm = document.getElementById('signupForm');
+    const loginLink = document.getElementById('loginLink');
+    
+    loginLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        location.reload();
+    });
+    
     signupForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
@@ -104,7 +117,7 @@ function showSignupForm() {
         users.push({
             username,
             email,
-            password, // Note: In production, hash this!
+            password,
             createdAt: new Date().toISOString()
         });
         
