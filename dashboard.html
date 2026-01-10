@@ -17,20 +17,18 @@
         </div>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                const username = localStorage.getItem('username');
-                const token = localStorage.getItem('authToken');
+                const username = localStorage.getItem('currentUser');
                 
-                if (!token) {
-                    window.location.href = '/index.html';
+                if (!username) {
+                    window.location.href = 'index.html';
                 } else {
                     document.getElementById('username-display').textContent = username;
                 }
             });
             
             function logout() {
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('username');
-                window.location.href = '/index.html';
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
             }
         </script>
     </body>
