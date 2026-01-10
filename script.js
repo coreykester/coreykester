@@ -25,7 +25,7 @@ function setupLogin() {
         
         if (user) {
             localStorage.setItem('currentUser', username);
-            window.location.href = 'dashboard.html';
+            window.location.href = './dashboard.html';
         } else {
             alert('Invalid username or password');
         }

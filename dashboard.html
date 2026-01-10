@@ -20,7 +20,7 @@
                 const username = localStorage.getItem('currentUser');
                 
                 if (!username) {
-                    window.location.href = 'index.html';
+                    window.location.href = './index.html';
                 } else {
                     document.getElementById('username-display').textContent = username;
                 }
@@ -28,7 +28,7 @@
             
             function logout() {
                 localStorage.removeItem('currentUser');
-                window.location.href = 'index.html';
+                window.location.href = './index.html';
             }
         </script>
     </body>
